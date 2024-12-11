@@ -4,6 +4,7 @@ package com.revature.controllers;
 
 import com.revature.models.Team;
 import com.revature.services.TeamService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,13 +18,18 @@ public class TeamController {
 
     private TeamService teamService;
 
+    @Autowired
+    public TeamController(TeamService teamService) {
+        this.teamService = teamService;
+    }
+
     //Insert a new Team (HTTP POST request)
     @PostMapping
     public ResponseEntity<Team> insertTeam(@RequestBody Team team) {
 
-        //TODO: send team to the service which will send it to the DAO
-
-        return ResponseEntity.ok(team);
+        //Send team to the service which will send it to the DAO
+        Team newTeam = teamService.insertTeam(team);
+        return ResponseEntity.ok(newTeam);
 
         //ResponseEntity helps us build an HTTP Response
         //.ok() sets the status code to 200
