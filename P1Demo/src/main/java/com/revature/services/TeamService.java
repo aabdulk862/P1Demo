@@ -8,6 +8,8 @@ import com.revature.models.Team;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TeamService {
 
@@ -34,7 +36,10 @@ public class TeamService {
         //if none of these ifs get triggered, the Team is valid and can be sent to the DAO
 
         return teamDAO.save(team);
+    }
 
+    public List<Team> getAllTeams(){
+        return teamDAO.findAll();
     }
 
 }

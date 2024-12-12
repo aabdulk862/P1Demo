@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController //Combines @Controller and @ResponseBody
 @RequestMapping("/teams") //All HTTP requests ending in /teams will be sent here
 //TODO: Add @CrossOrigin annotation to allow HTTP from anywhere
@@ -31,12 +33,17 @@ public class TeamController {
         //ResponseEntity helps us build an HTTP Response
         //.ok() sets the status code to 200
         //we send the team object back in the response body
+    }
 
+    @GetMapping
+    public ResponseEntity<List<Team>> getAllTeams(){
+        List<Team> teams = teamService.getAllTeams();
+        return ResponseEntity.ok(teams);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-        public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException e){
+    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    }
 
 }
