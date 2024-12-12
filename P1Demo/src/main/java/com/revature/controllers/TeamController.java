@@ -41,6 +41,15 @@ public class TeamController {
         return ResponseEntity.ok(teams);
     }
 
+    @GetMapping("/location/{location}")
+    public ResponseEntity<?> getTeamByLocation(@PathVariable String location){
+        List<Team> teams = teamService.findTeamByLocation(location);
+        if (teams.isEmpty()){
+            return ResponseEntity.status(404).body("No teams found in " + location);
+        }
+        return ResponseEntity.ok(teams);
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());

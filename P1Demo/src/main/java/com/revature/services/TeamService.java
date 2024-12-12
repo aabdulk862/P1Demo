@@ -42,4 +42,12 @@ public class TeamService {
         return teamDAO.findAll();
     }
 
+    public List<Team> findTeamByLocation(String location){
+        if (location == null || location.isBlank()){
+            throw new IllegalArgumentException("Location name can't be null or blank!");
+        }
+        List<Team> teams = teamDAO.findByTeamLocation(location);
+        return teams;
+    }
+
 }
