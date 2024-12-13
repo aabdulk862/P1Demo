@@ -15,44 +15,69 @@ import java.util.List;
 //TODO: Add @CrossOrigin annotation to allow HTTP from anywhere
 public class TeamController {
 
-    private TeamService teamService;
+    //We're going to use constructor injection to dependency inject the Service
+    private final TeamService teamService;
 
     @Autowired
     public TeamController(TeamService teamService) {
         this.teamService = teamService;
     }
 
-    //Insert a new Team (HTTP POST request)
+    //Insert a new Team (any POST request ending in /teams will invoke this method)
     @PostMapping
     public ResponseEntity<Team> insertTeam(@RequestBody Team team) {
 
         //Send team to the service which will send it to the DAO
         Team newTeam = teamService.insertTeam(team);
+
+        //Send back the returned Team object
         return ResponseEntity.ok(newTeam);
 
         //ResponseEntity helps us build an HTTP Response
         //.ok() sets the status code to 200
         //we send the team object back in the response body
+
     }
 
+    //Select all Teams (any GET request ending in /teams will invoke this method)
     @GetMapping
     public ResponseEntity<List<Team>> getAllTeams(){
-        List<Team> teams = teamService.getAllTeams();
-        return ResponseEntity.ok(teams);
+
+        //This time, I'll just do it in one line
+        return ResponseEntity.ok(teamService.getAllTeams());
+
     }
 
+    //Select all Teams by location (any GET request ending in /teams/location/{location})
     @GetMapping("/location/{location}")
-    public ResponseEntity<?> getTeamByLocation(@PathVariable String location){
-        List<Team> teams = teamService.findTeamByLocation(location);
-        if (teams.isEmpty()){
+    public ResponseEntity<?> getTeamsByLocation(@PathVariable String location){
+
+        //Request the List of teams from the Service
+        List<Team> teams = teamService.findByTeamLocation(location);
+
+        //If the List is empty, send a 404 (not found) with a message
+        if(teams.isEmpty()){
             return ResponseEntity.status(404).body("No teams found in " + location);
         }
+
+        //Send back the List of Teams if it's not empty
         return ResponseEntity.ok(teams);
+
     }
 
+
+    //Exception Handlers------------------------------
+
+    //Spring MVC has a built-in Exception handler that cleans up our Controller methods
+
+    //Exception handler for IllegalArgumentException
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+
+        //If an IllegalArgument is thrown, send back a 400 (bad request)
+        //with the Exception message in the response body
+        return ResponseEntity.badRequest().body(e.getMessage());
+
     }
 
 }

@@ -5,21 +5,24 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-// Check User model comments for notes on  each annotation
+//Check the User model comments for notes on each annotation
 
 @Component
 @Entity
 @Table(name = "teams")
 public class Team {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int teamId;
-    @Column(nullable = false)
+
+    @Column(nullable=false)
     private String teamName;
-    @Column(nullable = false)
+
+    @Column(nullable=false)
     private String teamLocation;
 
-    /* connection to user FK
+    /*connection to user FK
      *
      * mappedBy - Indicates the FK field in the User class
      *
@@ -28,9 +31,11 @@ public class Team {
      *
      * */
     @OneToMany(mappedBy = "team", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    //TODO: there will be a problem here
     private List<User> users;
 
     //boilerplate code-----------------------no args, all args, getter/setter, toString
+
     public Team() {
     }
 
@@ -78,7 +83,6 @@ public class Team {
                 "teamId=" + teamId +
                 ", teamName='" + teamName + '\'' +
                 ", teamLocation='" + teamLocation + '\'' +
-                ", users=" + users +
                 '}';
     }
 }

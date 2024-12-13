@@ -10,11 +10,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@Service //1 of the 4 stereotype annotations (makes a class a bean)
 public class TeamService {
 
     //autowire the DAO
     private final TeamDAO teamDAO;
+
     @Autowired
     public TeamService(TeamDAO teamDAO) {
         this.teamDAO = teamDAO;
@@ -36,18 +37,33 @@ public class TeamService {
         //if none of these ifs get triggered, the Team is valid and can be sent to the DAO
 
         return teamDAO.save(team);
+
     }
 
+    //This method gets all teams from the DB
     public List<Team> getAllTeams(){
+
+        //not too much error handling to do here
+        //TODO: maybe a different message if there are no records?
+
         return teamDAO.findAll();
+
     }
 
-    public List<Team> findTeamByLocation(String location){
-        if (location == null || location.isBlank()){
-            throw new IllegalArgumentException("Location name can't be null or blank!");
+    //This method gets all teams from the DB BY LOCATION
+    public List<Team> findByTeamLocation(String location){
+
+        //make sure the location is valid
+        if(location == null || location.isBlank()){
+            throw new IllegalArgumentException("Location can't be null or blank!");
         }
+
+        //get the list of teams
         List<Team> teams = teamDAO.findByTeamLocation(location);
+
+        //send the List back to the controller
         return teams;
+
     }
 
 }
