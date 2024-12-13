@@ -60,7 +60,14 @@ public class UserService {
     }
 
     //update user password
-
+    public User updateUserPassword(int userId, String newPassword){
+        User user = userDAO.findById(userId).orElseThrow(()->{
+           throw new IllegalArgumentException("No user found with ID" + userId);
+        });
+        user.setPassword(newPassword);
+        userDAO.save(user);
+        return user;
+    }
 
 
 }
