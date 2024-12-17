@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Button, Container, Table } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 interface Team {
   teamId: number;
@@ -15,21 +16,32 @@ export const Teams: React.FC = () => {
     getAllTeams();
   }, []);
 
+  const navigate = useNavigate();
+
   const getAllTeams = async () => {
     const response = await axios.get("http://localhost:4444/teams");
     setTeams(response.data);
   };
 
+  const deleteTeam = async (teamId: number) => {
+    alert("Team" + teamId + " has been Deleted");
+  };
+
   return (
     <>
       <Container>
-        <h3>Teams</h3>
+        <Button className="btn-info" onClick={() => navigate("/")}>
+          Back
+        </Button>
+        <br />
+        <h3>Sports Teams</h3>
         <Table>
           <thead>
             <tr>
               <th>Team ID</th>
               <th>Team Name</th>
               <th>Team Location</th>
+              <th>Options</th>
             </tr>
           </thead>
           <tbody>
@@ -40,7 +52,12 @@ export const Teams: React.FC = () => {
                   <td>{team.teamName}</td>
                   <td>{team.teamLocation}</td>
                   <td>
-                    <Button className="btn-danger" >Delete</Button>
+                    <Button
+                      className="btn-danger"
+                      onClick={() => deleteTeam(team.teamId)}
+                    >
+                      Delete
+                    </Button>
                   </td>
                 </tr>
               );
