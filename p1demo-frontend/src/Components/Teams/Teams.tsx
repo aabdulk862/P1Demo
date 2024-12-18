@@ -19,7 +19,9 @@ export const Teams: React.FC = () => {
   const navigate = useNavigate();
 
   const getAllTeams = async () => {
-    const response = await axios.get("http://localhost:4444/teams");
+    const response = await axios.get("http://localhost:4444/teams", {
+      withCredentials: true,
+    });
     setTeams(response.data);
   };
 

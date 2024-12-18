@@ -7,7 +7,6 @@ import com.revature.models.DTOs.OutgoingUserDTO;
 import com.revature.models.Team;
 import com.revature.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -79,7 +78,7 @@ public class UserService {
         //Empty List of OutgoingUserDTOs to be filled below
         List<OutgoingUserDTO> outgoingUsers = new ArrayList<>();
         //get all Users from DB
-        List<User> users = userDAO.findAll(Sort.by(Sort.Direction.ASC, "userId"));
+        List<User> users = userDAO.findAll();
         //loop through the Users, adding a new DTO for each record
         for(User user : users){
             //add the new DTO to the ArrayList using the all-args constructor

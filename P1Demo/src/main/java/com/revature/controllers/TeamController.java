@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController //Combines @Controller and @ResponseBody
 @RequestMapping("/teams") //All HTTP requests ending in /teams will be sent here
-@CrossOrigin
+@CrossOrigin(value = {"http://localhost:5173"}, allowCredentials = "true")
 public class TeamController {
 
     //We're going to use constructor injection to dependency inject the Service
@@ -65,19 +65,5 @@ public class TeamController {
 
     }
 
-
-    //Exception Handlers------------------------------
-
-    //Spring MVC has a built-in Exception handler that cleans up our Controller methods
-
-    //Exception handler for IllegalArgumentException
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgument(IllegalArgumentException e){
-
-        //If an IllegalArgument is thrown, send back a 400 (bad request)
-        //with the Exception message in the response body
-        return ResponseEntity.badRequest().body(e.getMessage());
-
-    }
 
 }
