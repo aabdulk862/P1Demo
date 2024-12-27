@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { Button, Container, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { store } from "../../GlobalData/store";
 
 interface Team {
   teamId: number;
@@ -36,6 +37,7 @@ export const Teams: React.FC = () => {
           Back
         </Button>
         <br />
+        <h2>Welcome to the Team Management System  {store.loggedInUser.username}</h2>
         <h3>Sports Teams</h3>
         <Table>
           <thead>

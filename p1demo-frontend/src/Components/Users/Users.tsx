@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Container, Table } from "react-bootstrap";
+import { store } from "../../GlobalData/store";
+import { useNavigate } from "react-router-dom";
 
 interface User {
   userId: number;
@@ -12,7 +14,10 @@ interface User {
 export const Users: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+    if (store.loggedInUser.role !== "manager") navigate("/");
     getAllUsers();
   }, []);
 

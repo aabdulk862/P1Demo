@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { store } from "../../GlobalData/store";
 
 export const Login: React.FC = () => {
   const [loginCredentials, setLoginCredentials] = useState({
@@ -22,21 +23,31 @@ export const Login: React.FC = () => {
   };
 
   const login = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:4444/auth",
-        loginCredentials,
-        { withCredentials: true }
-      );
-      if (response.data.role === "player") {
-        navigate("/teams");
-      } else {
-        navigate("/users");
-      }
-    } catch (error) {
-      console.error(error);
-      alert("User could not be logged in");
-    }
+    //TODO: make sure the username and password are present before proceeding
+    //use the username/password from the state object
+    const response = await axios
+      .post("http://localhost:4444/auth", loginCredentials, {
+        withCredentials: true,
+      }) //withCredentials lets us interact with sessions on the BackEnd
+      .then((response) => {
+        console.log(response);
+
+        //TODO: save this data globally
+        store.loggedInUser = response.data;
+        alert("Welcome " + response.data.username);
+        //players will get sent to the teams component, managers get sent to users
+        if (response.data.role === "player") {
+          navigate("/teams");
+        } else {
+          navigate("/users");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        //if login fails, basic bad-manners alert to tell them they goofed
+        alert(error.response.data);
+        //You could also just write a custom message
+      });
   };
 
   return (
